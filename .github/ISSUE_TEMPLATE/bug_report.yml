@@ -1,0 +1,64 @@
+name: Bug report
+description: Something isn't working right.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! A few details make bugs much quicker to fix.
+        Tip: install **BugSack** + **BugGrabber** to capture Lua errors.
+
+  - type: input
+    id: addon-version
+    attributes:
+      label: Addon version
+      description: Shown in the in-game AddOns list or on CurseForge.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: game-version
+    attributes:
+      label: Game version
+      description: Type /dump GetBuildInfo() in chat, or check the login screen.
+      placeholder: "1.16.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can it be reproduced?
+      description: Where were you (battleground, open world, dungeon), and what were you doing?
+      placeholder: |
+        1. Enter Warsong Gulch
+        2. Target an enemy player
+        3. ...
+
+  - type: textarea
+    id: lua-error
+    attributes:
+      label: Lua error (if any)
+      description: Paste the full error from BugSack, including the stack trace.
+      render: lua
+
+  - type: textarea
+    id: other-addons
+    attributes:
+      label: Other addons installed
+      description: Especially any nameplate addons (Plater, ThreatPlates, RedNamesForever, etc.).
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag and drop images here if they help show the problem.

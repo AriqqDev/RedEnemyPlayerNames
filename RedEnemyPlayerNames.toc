@@ -1,0 +1,12 @@
+## Interface: 16001
+## Title: Red Enemy Player Names
+## Notes: Colors enemy player names red on the default nameplates and adds a Horde/Alliance faction icon, so enemy players are easy to spot. Optional class colors and hostile mob name colors.
+## Author: Ariq
+## Version: 1.0.0
+## Category: PvP
+## X-Website: https://github.com/AriqqDev/RedEnemyPlayerNames
+## X-License: GPL-3.0-or-later
+## IconTexture: Interface\Icons\Inv_BannerPVP_01
+## SavedVariables: RedEnemyPlayerNamesDB
+
+RedEnemyPlayerNames.lua
