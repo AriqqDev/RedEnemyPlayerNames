@@ -629,6 +629,10 @@ SlashCmdList.REDENEMYPLAYERNAMES = function(msg)
     local command = (msg or ""):lower():match("^%s*(%S*)")
     if command == "bug" or command == "report" then
         ns.BugReport.Open()
+    elseif command == "testerror" then
+        -- Raises a harmless error through the same path real errors take,
+        -- to check that it shows up in BugSack and in /renp bug.
+        ns.Guard(function() error("Test error from /renp testerror (safe to ignore)") end)()
     else
         OpenSettings()
     end
