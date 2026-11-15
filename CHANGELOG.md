@@ -8,7 +8,7 @@
 
 First release.
 
-- Enemy player names are colored on the default nameplates: one custom color, or each player's class color.
+- Enemy player names are coloured on the default nameplates: one custom colour, or each player's class colour.
 - Horde/Alliance faction icon next to enemy player names, with adjustable size.
-- Optional color for hostile NPC names (off by default).
+- Optional colour for hostile NPC names (off by default).
 - Settings panel with a live preview: `/renp` or `/redenemy`, or Options > AddOns.
