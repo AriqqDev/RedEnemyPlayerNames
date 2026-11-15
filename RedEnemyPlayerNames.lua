@@ -11,6 +11,7 @@
 -- any later version. It is distributed WITHOUT ANY WARRANTY; see the LICENSE
 -- file or <https://www.gnu.org/licenses/> for details.
 
+local ADDON_NAME, ns = ...
 local DISPLAY_NAME = "Red Enemy Player Names"
 
 local DEFAULTS = {
@@ -24,6 +25,22 @@ local DEFAULTS = {
 }
 
 local db
+
+------------------------------------------------------------------------
+-- Bug reports (BugReport.lua): /renp bug, or the button in the settings
+------------------------------------------------------------------------
+
+ns.BugReport.Setup({
+    issueURL = "https://github.com/AriqqDev/RedEnemyPlayerNames/issues/new",
+    template = "bug_report.yml",
+    getStore = function() return db end,
+    getSettings = function()
+        if not db then return nil end
+        return ("enemyPlayers=%s, colorMode=%s, factionIcon=%s, iconSize=%s, hostileNPCs=%s"):format(
+            tostring(db.enemyPlayers), tostring(db.colorMode), tostring(db.factionIcon),
+            tostring(db.iconSize), tostring(db.hostileNPCs))
+    end,
+})
 
 ------------------------------------------------------------------------
 -- Saved settings
@@ -271,10 +288,11 @@ local function RefreshAll()
         Apply(plate.UnitFrame)
     end
 end
+local SafeRefreshAll = ns.Guard(RefreshAll)
 
 -- Blizzard repaints names here (new unit, target change, etc.).
 if type(CompactUnitFrame_UpdateName) == "function" then
-    hooksecurefunc("CompactUnitFrame_UpdateName", Apply)
+    hooksecurefunc("CompactUnitFrame_UpdateName", ns.Guard(Apply))
 end
 
 ------------------------------------------------------------------------
@@ -570,11 +588,21 @@ local function BuildPanel()
     reset:SetPoint("TOPLEFT", npcs, "BOTTOMLEFT", 2, -24)
     reset:SetText("Reset to defaults")
     reset:SetScript("OnClick", function()
+        -- Keep saved bug reports and errors; only the settings go back to default.
+        local errors, reports = db.bugReportErrors, db.bugReports
         wipe(db)
         FillMissing(db, DEFAULTS)
+        db.bugReportErrors, db.bugReports = errors, reports
         RefreshWidgets()
         OnSettingChanged()
     end)
+
+    local report = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
+    report:SetSize(140, 22)
+    report:SetPoint("LEFT", reset, "RIGHT", 10, 0)
+    report:SetText("Report a bug")
+    report:SetScript("OnClick", function() ns.BugReport.Open() end)
+    AddTooltip(report, "Opens a short form that builds a ready-to-send bug report for GitHub. You can also type /renp bug.")
 
     panel:SetScript("OnShow", RefreshWidgets)
 
@@ -597,7 +625,14 @@ end
 
 SLASH_REDENEMYPLAYERNAMES1 = "/redenemy"
 SLASH_REDENEMYPLAYERNAMES2 = "/renp"
-SlashCmdList.REDENEMYPLAYERNAMES = OpenSettings
+SlashCmdList.REDENEMYPLAYERNAMES = function(msg)
+    local command = (msg or ""):lower():match("^%s*(%S*)")
+    if command == "bug" or command == "report" then
+        ns.BugReport.Open()
+    else
+        OpenSettings()
+    end
+end
 
 ------------------------------------------------------------------------
 -- Events
@@ -613,7 +648,7 @@ events:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
 events:RegisterEvent("UNIT_FACTION")
 events:RegisterEvent("PLAYER_TARGET_CHANGED")
 
-events:SetScript("OnEvent", function(self, event, arg1)
+events:SetScript("OnEvent", ns.Guard(function(self, event, arg1)
     if event == "ADDON_LOADED" then
         if arg1 ~= "RedEnemyPlayerNames" then return end
         RedEnemyPlayerNamesDB = RedEnemyPlayerNamesDB or {}
@@ -642,6 +677,6 @@ events:SetScript("OnEvent", function(self, event, arg1)
         if plateForUnit[arg1] then Apply(plateForUnit[arg1]) end
     else
         -- Let Blizzard finish its own update first, then reapply.
-        C_Timer.After(0, RefreshAll)
+        C_Timer.After(0, SafeRefreshAll)
     end
-end)
+end))

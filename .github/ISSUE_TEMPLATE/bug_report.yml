@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Thanks for reporting! A few details make bugs much quicker to fix.
-        Tip: install **BugSack** + **BugGrabber** to capture Lua errors.
+        **Easiest way:** type `/renp bug` in game. It fills in this whole form for you, including any Lua error.
 
   - type: input
     id: addon-version
@@ -56,6 +56,12 @@ body:
     attributes:
       label: Other addons installed
       description: Especially any nameplate addons (Plater, ThreatPlates, RedNamesForever, etc.).
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Filled in automatically by /renp bug (interface version, language, addon settings).
 
   - type: textarea
     id: screenshots

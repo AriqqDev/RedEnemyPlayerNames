@@ -22,7 +22,9 @@ If you use another addon that colors nameplate names, such as RedNamesForever, d
 
 ## Bugs and suggestions
 
-Please use [GitHub Issues](../../issues/new/choose) rather than CurseForge comments. That way each report gets its own thread and can be tracked until it's fixed.
+The easiest way: type **`/renp bug`** in game (or click **Report a bug** in the settings). It builds a link to the GitHub bug form with everything filled in, including the latest Lua error from this addon. Copy it, paste it into your browser, check it, and submit.
+
+Or open [GitHub Issues](../../issues/new/choose) directly. Please don't report bugs in CurseForge comments: on GitHub each report gets its own thread and can be tracked until it's fixed.
 
 ## License
 
